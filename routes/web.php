@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\ProductList;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -20,6 +21,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('users', [UserController::class, 'index'])->name('users.index');
+Route::get('products', ProductList::class)->name('products');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
