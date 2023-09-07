@@ -3,16 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use Illuminate\Validation\Rule;
 use Illuminate\Contracts\View\View;
 use LivewireUI\Modal\ModalComponent;
 
-class ProductForm extends ModalComponent
+class ProductModal extends ModalComponent
 {
+    public ?Product $product = null;
     public Forms\ProductForm $form;
 
     public function mount(Product $product = null): void
     {
-        if (collect($product)->isNotEmpty()) {
+        if ($product->exists) {
             $this->form->setProduct($product);
         }
     }

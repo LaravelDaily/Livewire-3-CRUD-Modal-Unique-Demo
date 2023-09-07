@@ -3,19 +3,17 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Product;
-use Livewire\Attributes\Rule;
 use Livewire\Form;
+use Illuminate\Validation\Rule;
 
 class ProductForm extends Form
 {
-    public ?Product $product;
+    public ?Product $product = null;
 
-    #[Rule('required')]
     public string $name = '';
-    #[Rule('required')]
     public string $description = '';
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product = null): void
     {
         $this->product = $product;
         $this->name = $product->name;
@@ -26,16 +24,31 @@ class ProductForm extends Form
     {
         $this->validate();
 
-        if (empty($this->product)) {
-            Product::create($this->only(['name', 'description']));
-        } else {
-            $this->product->update($this->only(['name', 'description']));
-        }
+        Product::updateOrCreate(['name' => $this->name], [
+            'description' => $this->description,
+        ]);
 
         $this->reset();
     }
 
-    public function update(): void
+    public function update(): void {}
+
+    public function rules(): array
     {
+        return [
+            'name'        => [
+                'required',
+                Rule::unique('products', 'name')->ignore($this->component->product)
+            ],
+            'description' => ['required']
+        ];
+    }
+
+    public function validationAttributes(): array
+    {
+        return [
+            'name' => 'name',
+            'description' => 'description',
+        ];
     }
 }
