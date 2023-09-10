@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Product;
-use Illuminate\Validation\Rule;
 use Illuminate\Contracts\View\View;
 use LivewireUI\Modal\ModalComponent;
 
@@ -30,6 +29,6 @@ class ProductModal extends ModalComponent
 
     public function render(): View
     {
-        return view('livewire.product-form');
+        return view('livewire.product-modal');
     }
 }

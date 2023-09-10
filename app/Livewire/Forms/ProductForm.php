@@ -24,23 +24,25 @@ class ProductForm extends Form
     {
         $this->validate();
 
-        Product::updateOrCreate(['name' => $this->name], [
-            'description' => $this->description,
-        ]);
+        if (empty($this->product)) {
+            Product::create($this->only(['name', 'description']));
+        } else {
+            $this->product->update($this->only(['name', 'description']));
+        }
 
         $this->reset();
     }
-
-    public function update(): void {}
 
     public function rules(): array
     {
         return [
             'name'        => [
                 'required',
-                Rule::unique('products', 'name')->ignore($this->component->product)
+                Rule::unique('products', 'name')->ignore($this->component->product),
             ],
-            'description' => ['required']
+            'description' => [
+                'required'
+            ],
         ];
     }
 
